@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-g74-fymi$=71s)jy=-3pr@l=oke()#fcb&1ka8r+rr5am4&l*!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['notes-frontend', 'localhost']
+ALLOWED_HOSTS = ['localhost']
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES' : (
@@ -185,6 +185,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
-    'http://notes-frontend',
+    'http://localhost:5173',
 ]
 CORS_ALLOWS_CREDENTIALS = True
