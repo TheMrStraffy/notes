@@ -1,0 +1,15 @@
+FROM python:3.13.3-alpine3.21
+
+RUN apk update
+
+RUN apk add -y --no-cache bash postgresql-dev gcc python3-dev musl-dev
+
+RUN pip install --upgrade pip wheel
+
+COPY requirements.txt /requirements.txt
+
+RUN pip install -r ./requirements.txt
+
+WORKDIR /backend
+
+CMD [ "bash" ]

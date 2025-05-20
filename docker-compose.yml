@@ -1,0 +1,63 @@
+services:
+  notes-database:
+    image: postgres:15.13-alpine3.20
+    restart: always
+    environment:
+      - POSTGRES_USER=${pgsql-user}
+      - POSTGRES_PASSWORD=${pgsql-password}
+      - POSTGRES_DB=${pgsql-db}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 5s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+    ports:
+      - "5432:5432"
+    volumes:
+      - notes-db:/var/lib/postgresql/data
+    container_name: notes-database
+    networks:
+      - notes-network
+    
+    
+  notes-backend:
+    build: 
+      context: docker-config/backend
+      dockerfile: Dockerfile.backend
+    stdin_open: True # docker run -i
+    tty: True # docker run -t
+    environment:
+      - POSTGRES_USER=${pgsql-user}
+      - POSTGRES_PASSWORD=${pgsql-password}
+      - POSTGRES_DB=${pgsql-db}
+    ports:
+      - "8000:8000"
+    depends_on:
+      - notes-database
+    volumes:
+      - ./app/backend:/backend
+    container_name: notes-backend
+    networks:
+      - notes-network
+    
+  notes-frontend:
+    build: 
+      context: docker-config/frontend
+      dockerfile: Dockerfile.frontend
+    stdin_open: True # docker run -i
+    tty: True # docker run -t
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./app/frontend:/frontend
+    container_name: notes-frontend
+    networks:
+      - notes-network
+    
+    
+volumes:
+  notes-db:
+
+networks:
+  notes-network:
